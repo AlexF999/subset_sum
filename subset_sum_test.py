@@ -39,10 +39,44 @@ class TestBench:
     Runs all of the tests in the testbench
     """
     def run_bench(self):
-        print(self.description, '\n')
+        print("{}\n".format(self.description))
         for test_id in range(len(self.__tests)):
             test = self.__tests[test_id]
             description, test_function, test_parameters = test['description'], test['function'], test['inputs']
             print("Running test {}\n".format(test_id))
-            print("Description: {}".format(description))
+            print("Description: {}\n".format(description))
             assert test_function(*test_parameters)
+            print("Test {} okay\n\n".format(test_id))
+
+
+
+"""
+Testing strategy for subset_sum(nums, target): Cover all subdomains of the following partitions, each of which splits the input space into nonoverlapping subdomains that cover the whole input space.
+
+Partition on length of nums:
+- Length = 1
+- Length > 1
+
+Partition on the elements of nums:
+- All elements > 0
+- All elements < 0
+- All elements = 0
+- Otherwise
+
+Partition on target:
+- Positive target
+- Negative target
+- Zero target
+
+Partition on output:
+- Output is False (no subset exists)
+- Output contains one element
+- Output contains all elements (length > 1)
+- Output contains between one and all elements (length > 1)
+
+Partition on output:
+- Output is False
+- Output contains the first element of nums
+- Output contains the last element of nums (length > 1)
+- Output does not contain first or last element of nums (length > 2)
+"""
