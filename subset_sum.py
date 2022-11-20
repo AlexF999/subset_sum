@@ -1,7 +1,7 @@
 """
 Created on 11/19/2022
 
-Author: @alexf314
+Author: @AlexF999
 
 The subset-sum problem:
 Given an array of integers, nums, and an integer, target: Return a subset of numbers from the array (no repetitions) which add up to target.
