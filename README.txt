@@ -11,7 +11,9 @@ building up the solution from smaller subproblems.
 
     Let subset-sum(i, j) be the solution to subset-sum(nums(1, i), j), using 
 1-indexing, left and right endpoints inclusive. I.e., is there a subset of the 
-first i numbers that sums up to j?
+first i numbers that sums up to j? Note that if lower_bound is the smallest 
+possible sum, and upper_bound is the largest possible sum, then lower_bound <= 
+j <= upper_bound.
 
 Then the solution to subset-sum(i, j) equals one of the following:
 1. subset-sum(i-1, j) (if this subproblem has a solution)
@@ -22,9 +24,9 @@ Then the solution to subset-sum(i, j) equals one of the following:
     Notice these relations only depend on smaller indices i. We can use a table 
 to record the answers to subproblems. 
 
-    Constructing the table will take time O(nT), where n is the length of nums, 
-and T is the value of target. Note that this algorithm is still exponential in 
-the length of the input, T, in bits. As a consequence, if T were set to a very 
-large number, such as 2^32, this algorithm would be extremely slow. However, 
-for large n and small T, it runs much more quickly than the exhaustive-search 
-approach.
+    Constructing the table will take time O(nX), where n is the length of nums, 
+and X = upper_bound - lower_bound. Note that this algorithm is exponential in 
+the length of the upper and lower bounds, in bits. As a consequence, if the 
+array of integers contains very large or small numbers (e.g., 2^32 or -2^32),
+the algorithm will be extremely slow (and may throw an error). However, the 
+algorithm is very efficient for reasonably-sized integers, even for large n.
