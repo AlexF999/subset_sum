@@ -107,5 +107,24 @@ Partition on output:
 """
 
 
+"""
+Helper function for testing the subset_sum function. 
+
+'nums' and 'target' are parameters which satisfy the preconditions for subset_sum.
+'soln_exists' should be True if there is a solution to subset_sum(nums, target), and False otherwise.
+
+Raises an AssertionError if any of the following are true:
+- subset_sum(nums, target) returns False and soln_exists = True
+- subset_sum(nums, target) returns a subset and soln_exists = False
+- subset_sum(nums, target) returns a subset such that for some (num, index) in the subset, nums[index] != num
+- subset_sum(nums, target) returns a subset such that indices are repeated, or some indices are out of range
+- subset_sum(nums, target) returns a subset such that the sum of all numbers does not equal target
+
+Otherwise, returns None with no error raised.
+"""
+def test_ssum(nums: list, target: int, soln_exists: bool):
+    pass
+
+
 if __name__ == '__main__':
     pass
