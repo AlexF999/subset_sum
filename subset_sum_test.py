@@ -97,7 +97,7 @@ Partition on output:
 - Output is False (no subset exists)
 - Output contains one element
 - Output contains all elements (length > 1)
-- Output contains between one and all elements (length > 1)
+- Output contains between one element and all elements (length > 1)
 
 Partition on output:
 - Output is False
@@ -123,7 +123,22 @@ Raises an AssertionError if any of the following are true:
 Otherwise, returns None with no error raised.
 """
 def test_ssum(nums: list, target: int, soln_exists: bool):
-    pass
+    actual_output = subset_sum(nums, target)
+    actual_soln_exists = bool(actual_output)
+
+    assert bool(actual_output) == soln_exists, "Function does not correctly identify whether solution exists or not: Expected {} but got {}".format(soln_exists, actual_soln_exists)
+
+    indices_seen = set()
+    sum_of_output_nums = 0
+    for (num, index) in actual_output:
+        assert not(index in indices_seen), "Function repeats indices: Index {}".format(index)
+
+        assert nums[index] == num, "Function includes indices out of range, or indices which do not match accompanying number: Element {}, {}".format(num, index)
+
+        sum_of_output_nums += num
+        indices_seen.add(index)
+
+    assert sum_of_output_nums == target, "Function does not return subset of numbers which add to target: Expected {}, got {}".format(target, sum_of_output_nums)
 
 
 if __name__ == '__main__':
