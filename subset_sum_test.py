@@ -7,79 +7,14 @@ Tests for subset_sum.py
 """
 
 import subset_sum
-
-
-"""
-A class for packaging multiple tests into one testbench.
-"""
-class TestBench:
-    """
-    Class constructor.
-
-    description: A string description of the testbench as a whole.
-    """
-    def __init__(self, description: str):
-        self.__description = description
-        self.__num_tests = 0
-
-        # Rep. Invariant: The elems of __test are dictionary with the following key/value pairs:
-        # "description": string description of test
-        # "function": Pointer to the function for this test
-        # "Inputs": The parameters to pass to this function
-        self.__tests = []
-
-    """
-    Add a test to the testbench.
-
-    descripion: A string description of this particular test
-    funct: A pointer to a function to run as part of the testbench. It may have any output, but the output will be ignored when running the testbench. The function should *not* have any parameters.
-    """
-    def add_test(self, description: str, funct):
-        test = {'description': description, 'function': funct}
-        self.__tests.append(test)
-        self.__num_tests += 1
-
-    """
-    Add multiple tests to the testbench.
-
-    The tests should be in the form of a list of tuples (description, function), where description and function satisfy the preconditions in add_test.
-    """
-    def add_tests(self, tests: list):
-        for test in tests:
-            self.add_test(test[0], test[1])
-
-    """
-    Runs all of the tests in the testbench
-
-    Every test will be run, even if some fail.
-
-    The function provided for each test will be run as-is, and the test will pass if the function does not throw an exception.
-    """
-    def run_bench(self):
-        num_passed = 0
-        print("{}\n".format(self.__description))
-
-        for test_id in range(len(self.__tests)):
-            test = self.__tests[test_id]
-            description, test_function = test['description'], test['function']
-            print("Running test {}".format(test_id))
-            print("Description: {}".format(description))
-            try:
-                test_function()
-                print("Test {} passed\n".format(test_id))
-                num_passed += 1
-            except Exception as msg:
-                print(msg)
-                print("Test {} failed\n".format(test_id))
-        
-        print('{} tests passed, {} tests failed'.format(num_passed, self.__num_tests - num_passed))
-
+from ...coding.python_testbench.testbench import TestBench
 
 """
 Testing strategy for subset_sum(nums, target): Cover all subdomains of the following partitions, each of which splits the input space into nonoverlapping subdomains that cover the whole input space.
 
 Partition on length of nums:
-- Length = 1
+- Length = 1, target equals the element
+= Length = 1, target does not equal the element
 - Length > 1
 
 Partition on the elements of nums:
@@ -93,11 +28,18 @@ Partition on target:
 - Negative target
 - Zero target
 
+Partition on inputs:
+- Target > sum(nums: num > 0)
+- max(nums) < target <= sum(nums: num > 0)
+- min(nums) <= target <= max(nums)
+- sum(nums: num < 0) < target < min(nums)
+- Target < sum(nums: num < 0)
+
 Partition on output:
 - Output is False (no subset exists)
 - Output contains one element
-- Output contains all elements (length > 1)
-- Output contains between one element and all elements (length > 1)
+- Output contains all elements (and length > 1)
+- Output contains between one element and all elements (and length > 1)
 
 Partition on output:
 - Output is False
@@ -128,17 +70,20 @@ def test_ssum(nums: list, target: int, soln_exists: bool):
 
     assert bool(actual_output) == soln_exists, "Function does not correctly identify whether solution exists or not: Expected {} but got {}".format(soln_exists, actual_soln_exists)
 
+    # If there is no soln, no need to check whether sum equals target
+    if not(soln_exists): return
+
     indices_seen = set()
-    sum_of_output_nums = 0
+    actual_sum = 0
     for (num, index) in actual_output:
         assert not(index in indices_seen), "Function repeats indices: Index {}".format(index)
 
         assert nums[index] == num, "Function includes indices out of range, or indices which do not match accompanying number: Element {}, {}".format(num, index)
 
-        sum_of_output_nums += num
+        actual_sum += num
         indices_seen.add(index)
 
-    assert sum_of_output_nums == target, "Function does not return subset of numbers which add to target: Expected {}, got {}".format(target, sum_of_output_nums)
+    assert actual_sum == target, "Function does not return subset of numbers which add to target: Expected {}, got {}".format(target, actual_sum)
 
 
 if __name__ == '__main__':
